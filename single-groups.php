@@ -18,6 +18,10 @@ if ( ! current_user_can( 'access_groups' ) ) {
     $group_fields = Disciple_Tools_Groups_Post_Type::instance()->get_custom_fields_settings();
     $group_preferences = dt_get_option( 'group_preferences' );
     $current_user_id = get_current_user_id();
+
+    global $wpdb;
+    $results = $wpdb->get_results( "SELECT meta_value FROM wp_postmeta WHERE post_id = {$group["ID"]} AND meta_key = 'health_metrics'", OBJECT );
+
     get_header();?>
 
     <?php
@@ -31,6 +35,12 @@ if ( ! current_user_can( 'access_groups' ) ) {
         [],
         true
     ); ?>
+
+<style>
+    .opacity {
+        opacity: 0.1;
+    }
+</style>
 
 <!--<div id="errors"> </div>-->
 <div id="content" class="single-groups">
@@ -225,7 +235,6 @@ if ( ! current_user_can( 'access_groups' ) ) {
 
                             </section>
 
-                        <!-- Health Metrics-->
                         <?php if ( ! empty( $group_preferences['church_metrics'] ) ) : ?>
                             <section id="health-metrics" class="xlarge-6 large-12 medium-6 cell grid-item">
                                 <div class="bordered-box js-progress-bordered-box half-opacity" id="health-tile">
@@ -258,6 +267,32 @@ if ( ! current_user_can( 'access_groups' ) ) {
                                             </div>
                                         <?php endforeach; ?>
 
+                                    </div>
+
+                                </div><!-- end collapse --></div>
+                            </section>
+                        <?php endif; ?>
+
+                        <!-- Health Metrics-->
+                        <?php if ( ! empty( $group_preferences['church_metrics'] ) ) : ?>
+                            <section id="health-metrics_2" class="xlarge-12 large-12 medium-12 cell grid-item">
+                                <div class="bordered-box js-progress-bordered-box half-opacity" id="health-tile">
+
+                                    <h3 class="section-header"><?php echo esc_html( $group_fields["health_metrics"]["name"] )?>
+                                        <button class="help-button" data-section="health-metrics-help-text">
+                                            <img class="help-icon" src="<?php echo esc_html( get_template_directory_uri() . '/dt-assets/images/help.svg' ) ?>"/>
+                                        </button>
+                                        <button class="section-chevron chevron_down">
+                                            <img src="<?php echo esc_html( get_template_directory_uri() . '/dt-assets/images/chevron_down.svg' ) ?>"/>
+                                        </button>
+                                        <button class="section-chevron chevron_up">
+                                            <img src="<?php echo esc_html( get_template_directory_uri() . '/dt-assets/images/chevron_up.svg' ) ?>"/>
+                                        </button>
+                                    </h3>
+                                    <div class="section-body"><!-- start collapse -->
+
+                                    <div style="text-align: center;">
+                                        <canvas id="myCanvas" width="450" height="450"></canvas>
                                     </div>
 
                                 </div><!-- end collapse --></div>
@@ -401,6 +436,319 @@ if ( ! current_user_can( 'access_groups' ) ) {
 
 </div> <!-- end #content -->
 
+<script type="application/javascript">
+
+    let group = wpApiGroupsSettings.group
+    let groupId = group.ID
+    var progressCircleOptionsActive = <?php echo json_encode($group_fields["health_metrics"]["default"]); ?>;
+    var iconsActive = <?php echo json_encode($results); ?>;
+    var selected_group = <?php echo json_encode($group); ?>;
+    var countCircleOptionsActive = Object.keys(progressCircleOptionsActive).length
+    var canvas = document.getElementById('myCanvas');
+    var context = canvas.getContext('2d');
+    var centerX = canvas.width / 2;
+    var centerY = canvas.height / 2;
+    var radius = 200;
+    var canvasIcons = []
+
+    console.log(iconsActive)
+    console.log(selected_group)
+
+    // 12
+    var iconTemplate12 = [
+        { id: "", x: 200, y: 50, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 80, y: 100, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 50, y: 200, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 350, y: 200, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 80, y: 300, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 350, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 320, y: 300, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 320, y: 100, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 140, y: 140, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 260, y: 140, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 140, y: 260, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 260, y: 260, globalAlpha: 0.1, imageUrl: "" },
+    ]
+
+    // 11
+    var iconTemplate11 = [
+        { id: "", x: 200, y: 50, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 80, y: 100, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 80, y: 300, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 350, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 320, y: 300, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 320, y: 100, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 140, y: 140, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 260, y: 140, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 140, y: 260, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 260, y: 260, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 200, globalAlpha: 0.1, imageUrl: "" },
+    ]
+
+    // 10
+    var iconTemplate10 = [
+        { id: "", x: 200, y: 50, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 80, y: 100, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 80, y: 300, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 350, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 320, y: 300, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 320, y: 100, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 140, y: 140, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 260, y: 140, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 140, y: 260, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 260, y: 260, globalAlpha: 0.1, imageUrl: "" },
+    ]
+
+    // 9
+    var iconTemplate9 = [
+        { id: "", x: 200, y: 50, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 200, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 350, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 50, y: 200, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 350, y: 200, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 80, y: 100, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 80, y: 300, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 320, y: 300, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 320, y: 100, globalAlpha: 0.1, imageUrl: "" },
+    ]
+
+    // 8
+    var iconTemplate8 = [
+        { id: "", x: 200, y: 50, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 50, y: 200, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 350, y: 200, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 350, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 140, y: 140, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 260, y: 140, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 140, y: 260, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 260, y: 260, globalAlpha: 0.1, imageUrl: "" },
+    ]
+
+    // 7
+    var iconTemplate7 = [
+        { id: "", x: 200, y: 50, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 80, y: 100, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 80, y: 300, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 350, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 320, y: 300, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 320, y: 100, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 200, globalAlpha: 0.1, imageUrl: "" },
+    ]
+
+    // 6
+    iconTemplate6 = [
+        { id: "", x: 200, y: 50, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 80, y: 100, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 80, y: 300, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 350, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 320, y: 300, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 320, y: 100, globalAlpha: 0.1, imageUrl: "" },
+    ]
+
+    // 5
+    var iconTemplate5 = [
+        { id: "", x: 200, y: 50, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 200, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 350, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 50, y: 200, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 350, y: 200, globalAlpha: 0.1, imageUrl: "" },
+    ]
+
+    switch(countCircleOptionsActive){
+
+        case 5:
+            applyTemplate(iconTemplate5)
+        break;
+        case 6:
+            applyTemplate(iconTemplate6)
+        break;
+        case 7:
+            applyTemplate(iconTemplate7)
+        break;
+        case 8:
+            applyTemplate(iconTemplate8)
+        break;
+        case 9:
+            applyTemplate(iconTemplate9)
+        break;
+        case 10:
+            applyTemplate(iconTemplate10)
+        break;
+        case 11:
+            applyTemplate(iconTemplate11)
+        break;
+        case 12:
+            applyTemplate(iconTemplate12)
+        break;
+
+    }
+
+    function applyTemplate (template) {
+
+        var index = 0
+
+        for (var key in progressCircleOptionsActive) {
+            
+            var option = progressCircleOptionsActive[key]
+            var icon = template[index]
+            var imagePath = null
+
+            if(option.image){
+                if(option.image.includes("dt-assets")){
+                    imagePath = '<?php echo get_template_directory_uri(); ?>';
+                } else {
+                    imagePath = <?php echo json_encode($wpUploadDir["baseurl"]); ?>;
+                }
+            }
+
+            icon.id = key
+            icon.imageUrl = imagePath ? imagePath + option.image : ""
+            canvasIcons.push(icon)
+            index ++
+            imagePath = null
+        }
+
+        index = 0
+        drawProgressCircle()
+    }
+
+    function drawProgressCircle () {
+
+        context.beginPath();
+        context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        context.strokeStyle = '#000000';
+        context.fillStyle = "#000000cf";
+        context.globalAlpha = 1;
+        context.fill();
+        context.stroke();
+
+        canvasIcons.forEach((element, key) => {
+            var icon = canvas.getContext('2d');
+            var img = new Image;
+            var iconIsActive = findIconInArray(element.id)
+
+            icon.id = element.id
+            img.onload = function () {
+                icon.globalAlpha = iconIsActive ? 1 : element.globalAlpha
+                icon.drawImage(img, element.x, element.y);
+            }
+            img.src = element.imageUrl;
+        });
+    }
+
+    function findIconInArray (key){
+
+        var iconFined = false
+
+        iconsActive.forEach(element => {
+            if(!iconFined){
+                if(key == element.meta_value) {
+                    iconFined = true
+                }
+            }
+        });
+
+        return iconFined;
+    }
+
+    let health_keys = Object.keys(wpApiGroupsSettings.groups_custom_fields_settings.health_metrics.default)
+    function fillOutChurchHealthMetrics() {
+        if ( $("#health-metrics").length ) {
+        let svgItem = document.getElementById("church-svg-wrapper").contentDocument
+
+        let churchWheel = $(svgItem).find('svg')
+        health_keys.forEach(m=>{
+            if (group[`health_metrics`] && group.health_metrics.includes(m) ){
+            churchWheel.find(`#${m.replace("church_", "")}`).css("opacity", "1")
+            $(`#${m}`).css("opacity", "1")
+            } else {
+            churchWheel.find(`#${m.replace("church_", "")}`).css("opacity", ".1")
+            $(`#${m}`).css("opacity", ".4")
+            }
+        })
+        if ( !(group.health_metrics ||[]).includes("church_commitment") ){
+            churchWheel.find('#group').css("opacity", "1")
+            $(`#church_commitment`).css("opacity", ".4")
+        } else {
+            churchWheel.find('#group').css("opacity", ".1")
+            $(`#church_commitment`).css("opacity", "1")
+        }
+
+        $(".js-progress-bordered-box").removeClass("half-opacity")
+        }
+    }
+
+    function getCursorPosition(canvas, event) {
+
+        const rect = canvas.getBoundingClientRect()
+        const xAxis = event.clientX - rect.left
+        const yAxis = event.clientY - rect.top
+        var contextIcon = null
+
+        canvasIcons.forEach(element => {
+
+            if (!contextIcon) {
+                if ((xAxis >= element.x && xAxis <= element.x + 40) && (yAxis >= element.y && yAxis <= element.y + 40)){
+
+                    contextIcon = element
+                    
+                    if(element.globalAlpha == 1){
+                        element.globalAlpha = 0.1
+                    } else {
+                        element.globalAlpha = 1
+                    }
+
+                    let fieldId = element.id
+                    $("#"+fieldId).css('opacity', ".6");
+                    let already_set = _.get(group, `health_metrics`, []).includes(fieldId)
+                    let update = {values:[{value:fieldId}]}
+                    if ( already_set ){
+                    update.values[0].delete = true;
+                    }
+                    API.update_post( 'groups', groupId, {"health_metrics": update })
+                    .then(groupData=>{
+                        group = groupData
+                        fillOutChurchHealthMetrics()
+                    }).catch(err=>{
+                        console.log(err)
+                    })
+
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+
+                    context.beginPath();
+                    context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                    context.strokeStyle = '#000000';
+                    context.fillStyle = "#000000cf";
+                    context.globalAlpha = 1;
+                    context.fill();
+                    context.stroke();
+
+                    canvasIcons.forEach((element, key) => {
+        
+                        var icon = canvas.getContext('2d');
+                        var img = new Image;
+
+                            icon.id = element.id
+                            img.onload = function () {
+                                icon.globalAlpha = element.globalAlpha
+                                icon.drawImage(img, element.x, element.y);
+                            }
+                            img.src = element.imageUrl;
+                    });
+
+                }
+            } else {
+                contextIcon = null
+            }
+        });
+
+    }
+
+    canvas.addEventListener('mousedown', function(e) {
+        getCursorPosition(canvas, e)
+    })
+
+</script>
 
 <!--    Modals-->
     <?php get_template_part( 'dt-assets/parts/modals/modal', 'share' ); ?>

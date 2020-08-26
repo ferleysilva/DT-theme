@@ -235,52 +235,52 @@ class Disciple_Tools_Groups_Post_Type
                 "church_baptism" => [
                     "label" => __( "Baptism", 'disciple_tools' ),
                     "description" => _x( "The group is baptising.", 'Optional Documentation', 'disciple_tools' ),
-                    "image" => get_template_directory_uri() . '/dt-assets/images/groups/baptism.svg'
+                    "image" => '/dt-assets/images/groups/baptism.svg'
                 ],
                 "church_bible" => [
                     "label" => __( "Bible Study", 'disciple_tools' ),
                     "description" => _x( "The group is studying the bible.", 'Optional Documentation', 'disciple_tools' ),
-                    "image" => get_template_directory_uri() . '/dt-assets/images/groups/word.svg'
+                    "image" => '/dt-assets/images/groups/word.svg'
                 ],
                 "church_communion" => [
                     "label" => __( "Communion", 'disciple_tools' ),
                     "description" => _x( "The group is practicing communion.", 'Optional Documentation', 'disciple_tools' ),
-                    "image" => get_template_directory_uri() . '/dt-assets/images/groups/communion.svg'
+                    "image" => '/dt-assets/images/groups/communion.svg'
                 ],
                 "church_fellowship" => [
                     "label" => __( "Fellowship", 'disciple_tools' ),
                     "description" => _x( "The group is fellowshiping.", 'Optional Documentation', 'disciple_tools' ),
-                    "image" => get_template_directory_uri() . '/dt-assets/images/groups/heart.svg'
+                    "image" => '/dt-assets/images/groups/heart.svg'
                 ],
                 "church_giving" => [
                     "label" => __( "Giving", 'disciple_tools' ),
                     "description" => _x( "The group is giving.", 'Optional Documentation', 'disciple_tools' ),
-                    "image" => get_template_directory_uri() . '/dt-assets/images/groups/giving.svg'
+                    "image" => '/dt-assets/images/groups/giving.svg'
                 ],
                 "church_prayer" => [
                     "label" => __( "Prayer", 'disciple_tools' ),
                     "description" => _x( "The group is praying.", 'Optional Documentation', 'disciple_tools' ),
-                    "image" => get_template_directory_uri() . '/dt-assets/images/groups/prayer.svg'
+                    "image" => '/dt-assets/images/groups/prayer.svg'
                 ],
                 "church_praise" => [
                     "label" => __( "Praise", 'disciple_tools' ),
                     "description" => _x( "The group is praising.", 'Optional Documentation', 'disciple_tools' ),
-                    "image" => get_template_directory_uri() . '/dt-assets/images/groups/praise.svg'
+                    "image" => '/dt-assets/images/groups/praise.svg'
                 ],
                 "church_sharing" => [
                     "label" => __( "Sharing the Gospel", 'disciple_tools' ),
                     "description" => _x( "The group is sharing the gospel.", 'Optional Documentation', 'disciple_tools' ),
-                    "image" => get_template_directory_uri() . '/dt-assets/images/groups/evangelism.svg'
+                    "image" => '/dt-assets/images/groups/evangelism.svg'
                 ],
                 "church_leaders" => [
                     "label" => __( "Leaders", 'disciple_tools' ),
                     "description" => _x( "The group has leaders.", 'Optional Documentation', 'disciple_tools' ),
-                    "image" => get_template_directory_uri() . '/dt-assets/images/groups/leadership.svg'
+                    "image" => '/dt-assets/images/groups/leadership.svg'
                 ],
                 "church_commitment" => [
                     "label" => __( "Church Commitment", 'disciple_tools' ),
                     "description" => _x( "The group has committed to be church.", 'Optional Documentation', 'disciple_tools' ),
-                    "image" => get_template_directory_uri() . '/dt-assets/images/groups/covenant.svg'
+                    "image" => '/dt-assets/images/groups/covenant.svg'
                 ],
             ],
             "customizable" => "add_only"
