@@ -625,7 +625,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
         canvasIcons.forEach((element, key) => {
             var icon = canvas.getContext('2d');
             var img = new Image;
-            var iconIsActive = findIconInArray(element.id)
+            var iconIsActive = findIconInArray(element.id, null)
 
             icon.id = element.id
             img.onload = function () {
@@ -636,14 +636,22 @@ if ( ! current_user_can( 'access_groups' ) ) {
         });
     }
 
-    function findIconInArray (key){
+    function findIconInArray (key, object){
 
         var iconFined = false
 
         iconsActive.forEach(element => {
             if(!iconFined){
                 if(key == element.meta_value) {
-                    iconFined = true
+                    if(object) {
+                        if(object.id == element.meta_value) {
+                            iconFined = false
+                        } else {
+                            iconFined = true
+                        }
+                    } else {
+                        iconFined = true
+                    }
                 }
             }
         });
@@ -724,16 +732,17 @@ if ( ! current_user_can( 'access_groups' ) ) {
                     context.stroke();
 
                     canvasIcons.forEach((element, key) => {
-        
+                        
                         var icon = canvas.getContext('2d');
                         var img = new Image;
+                        var iconIsActive = findIconInArray(element.id, contextIcon)
 
-                            icon.id = element.id
-                            img.onload = function () {
-                                icon.globalAlpha = element.globalAlpha
-                                icon.drawImage(img, element.x, element.y);
-                            }
-                            img.src = element.imageUrl;
+                        icon.id = element.id
+                        img.onload = function () {
+                            icon.globalAlpha = iconIsActive ? 1 : 0.1
+                            icon.drawImage(img, element.x, element.y);
+                        }
+                        img.src = element.imageUrl;
                     });
 
                 }
