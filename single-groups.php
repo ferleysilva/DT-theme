@@ -451,8 +451,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
     var radius = 200;
     var canvasIcons = []
 
-    console.log(iconsActive)
-    console.log(selected_group)
+    console.log("----------------- ", iconsActive)
 
     // 12
     var iconTemplate12 = [
@@ -625,33 +624,26 @@ if ( ! current_user_can( 'access_groups' ) ) {
         canvasIcons.forEach((element, key) => {
             var icon = canvas.getContext('2d');
             var img = new Image;
-            var iconIsActive = findIconInArray(element.id, null)
+            var iconIsActive = findIconInArray(element.id)
 
             icon.id = element.id
             img.onload = function () {
                 icon.globalAlpha = iconIsActive ? 1 : element.globalAlpha
+                element.globalAlpha = iconIsActive ? 1 : element.globalAlpha
                 icon.drawImage(img, element.x, element.y);
             }
             img.src = element.imageUrl;
         });
     }
 
-    function findIconInArray (key, object){
+    function findIconInArray (key){
 
         var iconFined = false
 
         iconsActive.forEach(element => {
             if(!iconFined){
                 if(key == element.meta_value) {
-                    if(object) {
-                        if(object.id == element.meta_value) {
-                            iconFined = false
-                        } else {
-                            iconFined = true
-                        }
-                    } else {
-                        iconFined = true
-                    }
+                    iconFined = true
                 }
             }
         });
@@ -693,63 +685,87 @@ if ( ! current_user_can( 'access_groups' ) ) {
         const yAxis = event.clientY - rect.top
         var contextIcon = null
 
+        console.log(",,,,,,,,,,", iconsActive)
+
         canvasIcons.forEach(element => {
 
             if (!contextIcon) {
                 if ((xAxis >= element.x && xAxis <= element.x + 40) && (yAxis >= element.y && yAxis <= element.y + 40)){
 
                     contextIcon = element
+                    var contextIconCopy = contextIcon
                     
-                    if(element.globalAlpha == 1){
-                        element.globalAlpha = 0.1
-                    } else {
-                        element.globalAlpha = 1
-                    }
-
                     let fieldId = element.id
                     $("#"+fieldId).css('opacity', ".6");
                     let already_set = _.get(group, `health_metrics`, []).includes(fieldId)
                     let update = {values:[{value:fieldId}]}
+
                     if ( already_set ){
-                    update.values[0].delete = true;
+                        update.values[0].delete = true;
                     }
-                    API.update_post( 'groups', groupId, {"health_metrics": update })
-                    .then(groupData=>{
+
+                    API.update_post( 'groups', groupId, {"health_metrics": update }).then(groupData => {
+
                         group = groupData
+
+                        iconsActive = []
+
+                        if(group.health_metrics){
+                            group.health_metrics.forEach(metrics => {
+                                iconsActive.push({meta_value: metrics})
+                            });
+                        }
+
+
                         fillOutChurchHealthMetrics()
+
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+
+                        context.beginPath();
+                        context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                        context.strokeStyle = '#000000';
+                        context.fillStyle = "#000000cf";
+                        context.globalAlpha = 1;
+                        context.fill();
+                        context.stroke();
+
+                        canvasIcons.forEach((element, key) => {
+                            
+                            var icon = canvas.getContext('2d');
+                            var img = new Image;
+                            var iconIsActive = findIconInArray(element.id)
+
+                            icon.id = element.id
+
+                            if (icon.id == contextIconCopy.id) {
+                                if(iconIsActive && contextIconCopy.globalAlpha == 1){
+                                    iconIsActive = false
+
+                                } else if(!iconIsActive && contextIconCopy.globalAlpha == 0.1) {
+                                    iconIsActive = true
+                                }
+                            }
+
+                            img.onload = function () {
+                                icon.globalAlpha = iconIsActive ? 1 : 0.1
+                                element.globalAlpha = iconIsActive ? 1 : 0.1
+                                icon.drawImage(img, element.x, element.y);
+                            }
+                            img.src = element.imageUrl;
+                        });
+
                     }).catch(err=>{
                         console.log(err)
                     })
 
-                    context.clearRect(0, 0, canvas.width, canvas.height);
-
-                    context.beginPath();
-                    context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-                    context.strokeStyle = '#000000';
-                    context.fillStyle = "#000000cf";
-                    context.globalAlpha = 1;
-                    context.fill();
-                    context.stroke();
-
-                    canvasIcons.forEach((element, key) => {
-                        
-                        var icon = canvas.getContext('2d');
-                        var img = new Image;
-                        var iconIsActive = findIconInArray(element.id, contextIcon)
-
-                        icon.id = element.id
-                        img.onload = function () {
-                            icon.globalAlpha = iconIsActive ? 1 : 0.1
-                            icon.drawImage(img, element.x, element.y);
-                        }
-                        img.src = element.imageUrl;
-                    });
 
                 }
             } else {
                 contextIcon = null
             }
         });
+
+        console.log(" -------- ", iconsActive)
 
     }
 
