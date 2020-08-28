@@ -18,6 +18,13 @@ if ( ! current_user_can( 'access_groups' ) ) {
     $group_fields = Disciple_Tools_Groups_Post_Type::instance()->get_custom_fields_settings();
     $group_preferences = dt_get_option( 'group_preferences' );
     $current_user_id = get_current_user_id();
+    $pluginIsActive = false;
+
+    if(in_array('disciple-tools-visual-customization-plugin/disciple-tools-visual-customization-plugin.php', apply_filters('active_plugins', get_option('active_plugins')))){ 
+        $pluginIsActive = true;
+    } else {
+        $pluginIsActive = false;
+    }
 
     global $wpdb;
     $results = $wpdb->get_results( "SELECT meta_value FROM wp_postmeta WHERE post_id = {$group["ID"]} AND meta_key = 'health_metrics'", OBJECT );
@@ -235,7 +242,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
 
                             </section>
 
-                        <?php if ( ! empty( $group_preferences['church_metrics'] ) ) : ?>
+                        <?php if ( !empty( $group_preferences['church_metrics']) && !$pluginIsActive ) : ?>
                             <section id="health-metrics" class="xlarge-6 large-12 medium-6 cell grid-item">
                                 <div class="bordered-box js-progress-bordered-box half-opacity" id="health-tile">
 
@@ -274,7 +281,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
                         <?php endif; ?>
 
                         <!-- Health Metrics-->
-                        <?php if ( ! empty( $group_preferences['church_metrics'] ) ) : ?>
+                        <?php if ( !empty( $group_preferences['church_metrics']) && $pluginIsActive ) : ?>
                             <section id="health-metrics_2" class="xlarge-12 large-12 medium-12 cell grid-item">
                                 <div class="bordered-box js-progress-bordered-box half-opacity" id="health-tile">
 
@@ -450,8 +457,6 @@ if ( ! current_user_can( 'access_groups' ) ) {
     var centerY = canvas.height / 2;
     var radius = 200;
     var canvasIcons = []
-
-    console.log("----------------- ", iconsActive)
 
     // 12
     var iconTemplate12 = [
@@ -651,41 +656,12 @@ if ( ! current_user_can( 'access_groups' ) ) {
         return iconFined;
     }
 
-    let health_keys = Object.keys(wpApiGroupsSettings.groups_custom_fields_settings.health_metrics.default)
-    function fillOutChurchHealthMetrics() {
-        if ( $("#health-metrics").length ) {
-        let svgItem = document.getElementById("church-svg-wrapper").contentDocument
-
-        let churchWheel = $(svgItem).find('svg')
-        health_keys.forEach(m=>{
-            if (group[`health_metrics`] && group.health_metrics.includes(m) ){
-            churchWheel.find(`#${m.replace("church_", "")}`).css("opacity", "1")
-            $(`#${m}`).css("opacity", "1")
-            } else {
-            churchWheel.find(`#${m.replace("church_", "")}`).css("opacity", ".1")
-            $(`#${m}`).css("opacity", ".4")
-            }
-        })
-        if ( !(group.health_metrics ||[]).includes("church_commitment") ){
-            churchWheel.find('#group').css("opacity", "1")
-            $(`#church_commitment`).css("opacity", ".4")
-        } else {
-            churchWheel.find('#group').css("opacity", ".1")
-            $(`#church_commitment`).css("opacity", "1")
-        }
-
-        $(".js-progress-bordered-box").removeClass("half-opacity")
-        }
-    }
-
     function getCursorPosition(canvas, event) {
 
         const rect = canvas.getBoundingClientRect()
         const xAxis = event.clientX - rect.left
         const yAxis = event.clientY - rect.top
         var contextIcon = null
-
-        console.log(",,,,,,,,,,", iconsActive)
 
         canvasIcons.forEach(element => {
 
@@ -715,9 +691,6 @@ if ( ! current_user_can( 'access_groups' ) ) {
                                 iconsActive.push({meta_value: metrics})
                             });
                         }
-
-
-                        fillOutChurchHealthMetrics()
 
                         context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -764,8 +737,6 @@ if ( ! current_user_can( 'access_groups' ) ) {
                 contextIcon = null
             }
         });
-
-        console.log(" -------- ", iconsActive)
 
     }
 
