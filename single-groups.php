@@ -618,10 +618,23 @@ if ( ! current_user_can( 'access_groups' ) ) {
 
     function drawProgressCircle () {
 
+        var churchCommitmentActive = false
+
+        iconsActive.forEach((elem, key) => {
+            if(elem.meta_value == "church_commitment"){
+                churchCommitmentActive = true
+            }
+        });
+
         context.beginPath();
+        if (!churchCommitmentActive) {
+            context.setLineDash([10, 10]);
+        } else {
+            context.setLineDash([]);
+        }
         context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
         context.strokeStyle = '#000000';
-        context.fillStyle = "#000000cf";
+        context.fillStyle = "#929292";
         context.globalAlpha = 1;
         context.fill();
         context.stroke();
@@ -694,10 +707,23 @@ if ( ! current_user_can( 'access_groups' ) ) {
 
                         context.clearRect(0, 0, canvas.width, canvas.height);
 
+                        var churchCommitmentActive = false
+
+                        iconsActive.forEach((elem, key) => {
+                            if(elem.meta_value == "church_commitment"){
+                                churchCommitmentActive = true
+                            }
+                        });
+
                         context.beginPath();
+                        if (!churchCommitmentActive) {
+                            context.setLineDash([10, 10]);
+                        } else {
+                            context.setLineDash([]);
+                        }
                         context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
                         context.strokeStyle = '#000000';
-                        context.fillStyle = "#000000cf";
+                        context.fillStyle = "#929292";
                         context.globalAlpha = 1;
                         context.fill();
                         context.stroke();
