@@ -176,11 +176,14 @@ class Disciple_Tools_Groups_Post_Type
 
         $progressCircleOptionsActive = json_decode(get_option('vc_progress_circle_options'), TRUE);
 
-        foreach ($progressCircleOptionsActive["default"] as $key => $value) {
-            if($value["disable"] == 1) {
-                unset($progressCircleOptionsActive["default"][$key]);
+        if($progressCircleOptionsActive){
+            foreach ($progressCircleOptionsActive["default"] as $key => $value) {
+                if($value["disable"] == 1) {
+                    unset($progressCircleOptionsActive["default"][$key]);
+                }
             }
         }
+
         $pluginIsActive = false;
 
         if(in_array('disciple-tools-visual-customization-plugin/disciple-tools-visual-customization-plugin.php', apply_filters('active_plugins', get_option('active_plugins')))){ 

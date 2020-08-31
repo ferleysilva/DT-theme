@@ -43,12 +43,6 @@ if ( ! current_user_can( 'access_groups' ) ) {
         true
     ); ?>
 
-<style>
-    .opacity {
-        opacity: 0.1;
-    }
-</style>
-
 <!--<div id="errors"> </div>-->
 <div id="content" class="single-groups">
     <span id="group-id" style="display: none"><?php echo get_the_ID()?></span>
@@ -283,7 +277,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
                         <!-- Health Metrics-->
                         <?php if ( !empty( $group_preferences['church_metrics']) && $pluginIsActive ) : ?>
                             <section id="health-metrics_2" class="xlarge-12 large-12 medium-12 cell grid-item">
-                                <div class="bordered-box js-progress-bordered-box half-opacity" id="health-tile">
+                                <div class="bordered-box js-progress-bordered-box" id="health-tile">
 
                                     <h3 class="section-header"><?php echo esc_html( $group_fields["health_metrics"]["name"] )?>
                                         <button class="help-button" data-section="health-metrics-help-text">
@@ -460,102 +454,102 @@ if ( ! current_user_can( 'access_groups' ) ) {
 
     // 12
     var iconTemplate12 = [
-        { id: "", x: 200, y: 50, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 80, y: 100, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 50, y: 200, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 350, y: 200, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 80, y: 300, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 200, y: 350, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 320, y: 300, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 320, y: 100, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 140, y: 140, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 260, y: 140, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 140, y: 260, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 260, y: 260, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 50, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 80, y: 100, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 50, y: 200, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 350, y: 200, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 80, y: 300, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 200, y: 350, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 320, y: 300, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 320, y: 100, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 140, y: 140, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 260, y: 140, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 140, y: 260, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 260, y: 260, globalAlpha: 0.3, imageUrl: "" },
     ]
 
     // 11
     var iconTemplate11 = [
-        { id: "", x: 200, y: 50, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 80, y: 100, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 80, y: 300, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 200, y: 350, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 320, y: 300, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 320, y: 100, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 140, y: 140, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 260, y: 140, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 140, y: 260, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 260, y: 260, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 200, y: 200, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 50, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 80, y: 100, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 80, y: 300, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 200, y: 350, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 320, y: 300, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 320, y: 100, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 140, y: 140, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 260, y: 140, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 140, y: 260, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 260, y: 260, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 200, y: 200, globalAlpha: 0.3, imageUrl: "" },
     ]
 
     // 10
     var iconTemplate10 = [
-        { id: "", x: 200, y: 50, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 80, y: 100, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 80, y: 300, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 200, y: 350, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 320, y: 300, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 320, y: 100, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 140, y: 140, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 260, y: 140, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 140, y: 260, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 260, y: 260, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 50, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 80, y: 100, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 80, y: 300, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 200, y: 350, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 320, y: 300, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 320, y: 100, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 140, y: 140, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 260, y: 140, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 140, y: 260, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 260, y: 260, globalAlpha: 0.3, imageUrl: "" },
     ]
 
     // 9
     var iconTemplate9 = [
-        { id: "", x: 200, y: 50, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 200, y: 200, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 200, y: 350, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 50, y: 200, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 350, y: 200, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 80, y: 100, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 80, y: 300, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 320, y: 300, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 320, y: 100, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 50, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 200, y: 200, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 200, y: 350, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 50, y: 200, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 350, y: 200, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 80, y: 100, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 80, y: 300, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 320, y: 300, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 320, y: 100, globalAlpha: 0.3, imageUrl: "" },
     ]
 
     // 8
     var iconTemplate8 = [
-        { id: "", x: 200, y: 50, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 50, y: 200, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 350, y: 200, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 200, y: 350, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 140, y: 140, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 260, y: 140, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 140, y: 260, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 260, y: 260, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 50, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 50, y: 200, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 350, y: 200, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 200, y: 350, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 140, y: 140, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 260, y: 140, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 140, y: 260, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 260, y: 260, globalAlpha: 0.3, imageUrl: "" },
     ]
 
     // 7
     var iconTemplate7 = [
-        { id: "", x: 200, y: 50, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 80, y: 100, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 80, y: 300, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 200, y: 350, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 320, y: 300, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 320, y: 100, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 200, y: 200, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 50, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 80, y: 100, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 80, y: 300, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 200, y: 350, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 320, y: 300, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 320, y: 100, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 200, y: 200, globalAlpha: 0.3, imageUrl: "" },
     ]
 
     // 6
     iconTemplate6 = [
-        { id: "", x: 200, y: 50, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 80, y: 100, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 80, y: 300, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 200, y: 350, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 320, y: 300, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 320, y: 100, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 50, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 80, y: 100, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 80, y: 300, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 200, y: 350, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 320, y: 300, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 320, y: 100, globalAlpha: 0.3, imageUrl: "" },
     ]
 
     // 5
     var iconTemplate5 = [
-        { id: "", x: 200, y: 50, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 200, y: 200, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 200, y: 350, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 50, y: 200, globalAlpha: 0.1, imageUrl: "" },
-        { id: "", x: 350, y: 200, globalAlpha: 0.1, imageUrl: "" },
+        { id: "", x: 200, y: 50, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 200, y: 200, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 200, y: 350, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 50, y: 200, globalAlpha: 0.3, imageUrl: "" },
+        { id: "", x: 350, y: 200, globalAlpha: 0.3, imageUrl: "" },
     ]
 
     switch(countCircleOptionsActive){
@@ -740,14 +734,14 @@ if ( ! current_user_can( 'access_groups' ) ) {
                                 if(iconIsActive && contextIconCopy.globalAlpha == 1){
                                     iconIsActive = false
 
-                                } else if(!iconIsActive && contextIconCopy.globalAlpha == 0.1) {
+                                } else if(!iconIsActive && contextIconCopy.globalAlpha == 0.3) {
                                     iconIsActive = true
                                 }
                             }
 
                             img.onload = function () {
-                                icon.globalAlpha = iconIsActive ? 1 : 0.1
-                                element.globalAlpha = iconIsActive ? 1 : 0.1
+                                icon.globalAlpha = iconIsActive ? 1 : 0.3
+                                element.globalAlpha = iconIsActive ? 1 : 0.3
                                 icon.drawImage(img, element.x, element.y);
                             }
                             img.src = element.imageUrl;
