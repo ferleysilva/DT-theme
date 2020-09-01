@@ -441,6 +441,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
 
     let group = wpApiGroupsSettings.group
     let groupId = group.ID
+    var progressCircleBackground = <?php echo json_encode($group_fields["health_metrics"]); ?>;
     var progressCircleOptionsActive = <?php echo json_encode($group_fields["health_metrics"]["default"]); ?>;
     var iconsActive = <?php echo json_encode($results); ?>;
     var selected_group = <?php echo json_encode($group); ?>;
@@ -628,7 +629,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
         }
         context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
         context.strokeStyle = '#000000';
-        context.fillStyle = "#929292";
+        context.fillStyle = progressCircleBackground["background"];
         context.globalAlpha = 1;
         context.fill();
         context.stroke();
@@ -717,7 +718,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
                         }
                         context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
                         context.strokeStyle = '#000000';
-                        context.fillStyle = "#929292";
+                        context.fillStyle = progressCircleBackground["background"];
                         context.globalAlpha = 1;
                         context.fill();
                         context.stroke();
