@@ -16,6 +16,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
     $following = DT_Posts::get_users_following_post( "groups", get_the_ID() );
     $group = Disciple_Tools_Groups::get_group( get_the_ID(), true, true );
     $group_fields = Disciple_Tools_Groups_Post_Type::instance()->get_custom_fields_settings();
+    $progressCircleTemplates = json_decode(get_option('vc_progress_circle_template'), TRUE);
     $group_preferences = dt_get_option( 'group_preferences' );
     $current_user_id = get_current_user_id();
     $pluginIsActive = false;
@@ -442,6 +443,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
     let group = wpApiGroupsSettings.group
     let groupId = group.ID
     var progressCircleBackground = <?php echo json_encode($group_fields["health_metrics"]); ?>;
+    var progressCircleTemplates = <?php echo json_encode($progressCircleTemplates); ?>;
     var progressCircleOptionsActive = <?php echo json_encode($group_fields["health_metrics"]["default"]); ?>;
     var iconsActive = <?php echo json_encode($results); ?>;
     var selected_group = <?php echo json_encode($group); ?>;
@@ -453,131 +455,31 @@ if ( ! current_user_can( 'access_groups' ) ) {
     var radius = 200;
     var canvasIcons = []
 
-    // 12
-    var iconTemplate12 = [
-        { id: "", x: 200, y: 50, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 80, y: 100, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 50, y: 200, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 350, y: 200, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 80, y: 300, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 200, y: 350, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 320, y: 300, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 320, y: 100, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 140, y: 140, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 260, y: 140, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 140, y: 260, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 260, y: 260, globalAlpha: 0.3, imageUrl: "" },
-    ]
-
-    // 11
-    var iconTemplate11 = [
-        { id: "", x: 200, y: 50, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 80, y: 100, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 80, y: 300, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 200, y: 350, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 320, y: 300, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 320, y: 100, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 140, y: 140, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 260, y: 140, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 140, y: 260, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 260, y: 260, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 200, y: 200, globalAlpha: 0.3, imageUrl: "" },
-    ]
-
-    // 10
-    var iconTemplate10 = [
-        { id: "", x: 200, y: 50, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 80, y: 100, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 80, y: 300, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 200, y: 350, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 320, y: 300, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 320, y: 100, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 140, y: 140, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 260, y: 140, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 140, y: 260, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 260, y: 260, globalAlpha: 0.3, imageUrl: "" },
-    ]
-
-    // 9
-    var iconTemplate9 = [
-        { id: "", x: 200, y: 50, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 200, y: 200, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 200, y: 350, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 50, y: 200, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 350, y: 200, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 80, y: 100, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 80, y: 300, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 320, y: 300, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 320, y: 100, globalAlpha: 0.3, imageUrl: "" },
-    ]
-
-    // 8
-    var iconTemplate8 = [
-        { id: "", x: 200, y: 50, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 50, y: 200, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 350, y: 200, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 200, y: 350, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 140, y: 140, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 260, y: 140, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 140, y: 260, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 260, y: 260, globalAlpha: 0.3, imageUrl: "" },
-    ]
-
-    // 7
-    var iconTemplate7 = [
-        { id: "", x: 200, y: 50, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 80, y: 100, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 80, y: 300, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 200, y: 350, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 320, y: 300, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 320, y: 100, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 200, y: 200, globalAlpha: 0.3, imageUrl: "" },
-    ]
-
-    // 6
-    iconTemplate6 = [
-        { id: "", x: 200, y: 50, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 80, y: 100, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 80, y: 300, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 200, y: 350, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 320, y: 300, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 320, y: 100, globalAlpha: 0.3, imageUrl: "" },
-    ]
-
-    // 5
-    var iconTemplate5 = [
-        { id: "", x: 200, y: 50, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 200, y: 200, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 200, y: 350, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 50, y: 200, globalAlpha: 0.3, imageUrl: "" },
-        { id: "", x: 350, y: 200, globalAlpha: 0.3, imageUrl: "" },
-    ]
-
     switch(countCircleOptionsActive){
 
         case 5:
-            applyTemplate(iconTemplate5)
+            applyTemplate(progressCircleTemplates["iconTemplate5"])
         break;
         case 6:
-            applyTemplate(iconTemplate6)
+            applyTemplate(progressCircleTemplates["iconTemplate6"])
         break;
         case 7:
-            applyTemplate(iconTemplate7)
+            applyTemplate(progressCircleTemplates["iconTemplate7"])
         break;
         case 8:
-            applyTemplate(iconTemplate8)
+            applyTemplate(progressCircleTemplates["iconTemplate8"])
         break;
         case 9:
-            applyTemplate(iconTemplate9)
+            applyTemplate(progressCircleTemplates["iconTemplate9"])
         break;
         case 10:
-            applyTemplate(iconTemplate10)
+            applyTemplate(progressCircleTemplates["iconTemplate10"])
         break;
         case 11:
-            applyTemplate(iconTemplate11)
+            applyTemplate(progressCircleTemplates["iconTemplate11"])
         break;
         case 12:
-            applyTemplate(iconTemplate12)
+            applyTemplate(progressCircleTemplates["iconTemplate12"])
         break;
 
     }
@@ -596,11 +498,16 @@ if ( ! current_user_can( 'access_groups' ) ) {
                 if(option.image.includes("dt-assets")){
                     imagePath = '<?php echo get_template_directory_uri(); ?>';
                 } else {
-                    imagePath = <?php echo json_encode($wpUploadDir["baseurl"]); ?>;
+
+                    path = '<?php echo get_template_directory_uri(); ?>'
+                    arrayUrlImages = path.split('/themes/disciple-tools-theme-edited')
+
+                    imagePath = arrayUrlImages[0] + '/uploads'
                 }
             }
 
             icon.id = key
+            icon.label = option.label
             icon.imageUrl = imagePath ? imagePath + option.image : ""
             canvasIcons.push(icon)
             index ++
@@ -628,7 +535,8 @@ if ( ! current_user_can( 'access_groups' ) ) {
             context.setLineDash([]);
         }
         context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-        context.strokeStyle = '#000000';
+        context.strokeStyle = progressCircleBackground["border"];
+        context.lineWidth = 2;
         context.fillStyle = progressCircleBackground["background"];
         context.globalAlpha = 1;
         context.fill();
@@ -636,11 +544,69 @@ if ( ! current_user_can( 'access_groups' ) ) {
 
         canvasIcons.forEach((element, key) => {
             var icon = canvas.getContext('2d');
+            var label = canvas.getContext('2d');
             var img = new Image;
             var iconIsActive = findIconInArray(element.id)
 
             icon.id = element.id
             img.onload = function () {
+
+                var imgWidth = img.width
+                var imgHeight = img.height
+
+                labelArray = element.label.split(' ')
+                label.globalAlpha = iconIsActive ? 1 : element.globalAlpha
+                label.fillStyle = progressCircleBackground["label"]
+
+                if (labelArray[0].length > 5 && labelArray.length > 1) {
+
+                    var labelWidth = labelArray[0].length * 4
+                    var labelTwo = labelArray[2] ? labelArray[1] + ' ' + labelArray[2] : labelArray[1]
+                    var labelTwoWidth = labelTwo.length * 4
+
+                    if (labelWidth > imgWidth) {
+
+                        var diferent = labelWidth - imgWidth
+
+                        label.fillText(labelArray[0], (element.x - diferent), element.y + (imgHeight + 10));
+                    } else {
+
+                        var diferent = (imgWidth - labelWidth)
+
+                        label.fillText(labelArray[0], element.x + Math.round(diferent / 3), element.y + (imgHeight + 10));
+                    }
+
+                    if (labelTwoWidth > imgWidth) {
+
+                        var diferent = labelTwoWidth - imgWidth
+
+                        label.fillText(labelTwo, (element.x - diferent), (element.y + 10) + (imgHeight + 10));
+                    } else {
+
+                        var diferent = (imgWidth - labelTwoWidth)
+
+                        label.fillText(labelTwo, element.x + Math.round(diferent / 3), (element.y + 10) + (imgHeight + 10));
+                    }
+
+                    
+                } else {
+
+                    var labelWidth = element.label.length * 4
+
+                    if (labelWidth > imgWidth) {
+
+                        var diferent = labelWidth - imgWidth
+
+                        label.fillText(element.label, (element.x - diferent), element.y + (imgHeight + 10));
+                    } else {
+
+                        var diferent = (imgWidth - labelWidth)
+
+                        label.fillText(element.label, element.x + Math.round(diferent / 3), element.y + (imgHeight + 10));
+                    }
+
+                }
+
                 icon.globalAlpha = iconIsActive ? 1 : element.globalAlpha
                 element.globalAlpha = iconIsActive ? 1 : element.globalAlpha
                 icon.drawImage(img, element.x, element.y);
@@ -717,7 +683,8 @@ if ( ! current_user_can( 'access_groups' ) ) {
                             context.setLineDash([]);
                         }
                         context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-                        context.strokeStyle = '#000000';
+                        context.strokeStyle = progressCircleBackground["border"];
+                        context.lineWidth = 2;
                         context.fillStyle = progressCircleBackground["background"];
                         context.globalAlpha = 1;
                         context.fill();
@@ -726,6 +693,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
                         canvasIcons.forEach((element, key) => {
                             
                             var icon = canvas.getContext('2d');
+                            var label = canvas.getContext('2d');
                             var img = new Image;
                             var iconIsActive = findIconInArray(element.id)
 
@@ -741,6 +709,71 @@ if ( ! current_user_can( 'access_groups' ) ) {
                             }
 
                             img.onload = function () {
+
+                                var imgWidth = img.width
+                                var imgHeight = img.height
+
+                                labelArray = element.label.split(' ')
+                                label.globalAlpha = iconIsActive ? 1 : 0.3
+                                label.fillStyle = progressCircleBackground["label"];
+
+                                // VALIDATION IF LABEL HAVE SPACES
+
+                                if (labelArray[0].length > 5 && labelArray.length > 1) {
+
+                                    var labelWidth = labelArray[0].length * 4
+                                    var labelTwo = labelArray[2] ? labelArray[1] + ' ' + labelArray[2] : labelArray[1]
+                                    var labelTwoWidth = labelTwo.length * 4
+
+                                    // LOGIC FOR LABEL ONE
+
+                                    if (labelWidth > imgWidth) {
+
+                                        var diferent = labelWidth - imgWidth
+
+                                        label.fillText(labelArray[0], (element.x - diferent), element.y + (imgHeight + 10));
+                                    } else {
+
+                                        var diferent = (imgWidth - labelWidth)
+
+                                        label.fillText(labelArray[0], element.x + Math.round(diferent / 3), element.y + (imgHeight + 10));
+                                    }
+
+                                    // LOGIC FOR LABEL TWO
+
+                                    if (labelTwoWidth > imgWidth) {
+
+                                        var diferent = labelTwoWidth - imgWidth
+
+                                        label.fillText(labelTwo, (element.x - diferent), (element.y + 10) + (imgHeight + 10));
+                                    } else {
+
+                                        var diferent = (imgWidth - labelTwoWidth)
+
+                                        label.fillText(labelTwo, element.x + Math.round(diferent / 3), (element.y + 10) + (imgHeight + 10));
+                                    }
+
+                                    
+                                } else {
+
+                                    // LOGIC FOR LABEL
+
+                                    var labelWidth = element.label.length * 4
+
+                                    if (labelWidth > imgWidth) {
+
+                                        var diferent = labelWidth - imgWidth
+
+                                        label.fillText(element.label, (element.x - diferent), element.y + (imgHeight + 10));
+                                    } else {
+
+                                        var diferent = (imgWidth - labelWidth)
+
+                                        label.fillText(element.label, element.x + Math.round(diferent / 3), element.y + (imgHeight + 10));
+                                    }
+
+                                }
+
                                 icon.globalAlpha = iconIsActive ? 1 : 0.3
                                 element.globalAlpha = iconIsActive ? 1 : 0.3
                                 icon.drawImage(img, element.x, element.y);

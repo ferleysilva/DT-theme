@@ -58,6 +58,9 @@ if(in_array('disciple-tools-2FA-plugin/disciple-tools-2FA.php', apply_filters('a
                         <li><a href="#multiplier"><?php esc_html_e( 'Multiplier Preferences', 'disciple_tools' )?></a></li>
                         <li><a href="#availability"><?php esc_html_e( 'Availability', 'disciple_tools' )?></a></li>
                         <li><a href="#notifications"><?php esc_html_e( 'Notifications', 'disciple_tools' )?></a></li>
+                        <?php if ( $plugin2FAIsActive ) : ?>
+                        <li><a href="#authentications">Two Factor Authentication</a></li>
+                        <?php endif; ?>
                     </ul>
 
                 </div>
