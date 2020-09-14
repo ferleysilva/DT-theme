@@ -218,6 +218,24 @@ class DT_Posts extends Disciple_Tools_Posts {
     }
 
 
+
+
+    public static function create_or_update_influence( string $post_type, int $post_id, array $fields, bool $check_permissions = true ){
+
+        foreach ( $fields as $field_key => $field_value ){
+
+            $field_in_database = get_post_meta( $post_id, $field_key );
+
+            if ($field_in_database != null){
+                update_post_meta( $post_id, $field_key, $field_value );
+            } else {
+                add_post_meta( $post_id, $field_key, $field_value );
+            }
+
+        }
+    }
+
+
     /**
      * Update post
      * For fields format See https://github.com/DiscipleTools/disciple-tools-theme/wiki/Contact-Fields-Format

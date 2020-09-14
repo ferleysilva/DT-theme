@@ -16,7 +16,11 @@ if ( ! current_user_can( 'access_groups' ) ) {
     $following = DT_Posts::get_users_following_post( "groups", get_the_ID() );
     $group = Disciple_Tools_Groups::get_group( get_the_ID(), true, true );
     $group_fields = Disciple_Tools_Groups_Post_Type::instance()->get_custom_fields_settings();
-    $progressCircleTemplates = json_decode(get_option('vc_progress_circle_template'), TRUE);
+
+    if (get_option('vc_progress_circle_template') != null) {
+        $progressCircleTemplates = json_decode(get_option('vc_progress_circle_template'), TRUE);
+    }
+
     $group_preferences = dt_get_option( 'group_preferences' );
     $current_user_id = get_current_user_id();
     $pluginIsActive = false;
@@ -43,6 +47,61 @@ if ( ! current_user_can( 'access_groups' ) ) {
         [],
         true
     ); ?>
+
+<style>
+    #slider-influence {
+        background: #82CFD0;
+        border: solid 1px #82CFD0;
+        border-radius: 8px;
+        height: 7px;
+        width: 356px;
+        outline: none;
+        -webkit-appearance: none;
+    }
+
+    #message-modal-influence {
+        margin-bottom: 0;
+        text-align: center;
+    }
+
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 16%; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 20%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover, .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+</style>
 
 <!--<div id="errors"> </div>-->
 <div id="content" class="single-groups">
@@ -233,6 +292,18 @@ if ( ! current_user_can( 'access_groups' ) ) {
                                             </div>
                                         </div>
                                     </div>
+
+                                    <?php if ( $pluginIsActive ) : ?>
+                                    
+                                    <div class="section-subheader">
+                                        Influence: <span id="influence-number"></span>
+                                    </div>
+                                    <div class="influence">
+                                        <input id="slider-influence" style="width: 100%;" type="range" min="0" max="100" onchange="onChangeSlider(this.value)">
+                                    </div>
+
+                                    <?php endif; ?>
+
                                 </div>
 
                             </section>
@@ -294,7 +365,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
                                     <div class="section-body"><!-- start collapse -->
 
                                     <div style="text-align: center;">
-                                        <canvas id="myCanvas" width="450" height="450"></canvas>
+                                        <canvas id="canvas-church-metrics" width="450" height="450"></canvas>
                                     </div>
 
                                 </div><!-- end collapse --></div>
@@ -436,52 +507,67 @@ if ( ! current_user_can( 'access_groups' ) ) {
 
     </div> <!-- end #inner-content -->
 
+    <div id="modal-influence" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="message-modal-influence"></p>
+        </div>
+    </div>
+
 </div> <!-- end #content -->
 
 <script type="application/javascript">
 
+    var canvas = document.getElementById('canvas-church-metrics');
     let group = wpApiGroupsSettings.group
     let groupId = group.ID
     var progressCircleBackground = <?php echo json_encode($group_fields["health_metrics"]); ?>;
+    var inputInfluenceValue = <?php echo json_encode(get_post_meta($group['ID'], 'influence')) ?>;
     var progressCircleTemplates = <?php echo json_encode($progressCircleTemplates); ?>;
     var progressCircleOptionsActive = <?php echo json_encode($group_fields["health_metrics"]["default"]); ?>;
     var iconsActive = <?php echo json_encode($results); ?>;
     var selected_group = <?php echo json_encode($group); ?>;
     var countCircleOptionsActive = Object.keys(progressCircleOptionsActive).length
-    var canvas = document.getElementById('myCanvas');
-    var context = canvas.getContext('2d');
-    var centerX = canvas.width / 2;
-    var centerY = canvas.height / 2;
-    var radius = 200;
-    var canvasIcons = []
 
-    switch(countCircleOptionsActive){
+    if(canvas){
 
-        case 5:
-            applyTemplate(progressCircleTemplates["iconTemplate5"])
-        break;
-        case 6:
-            applyTemplate(progressCircleTemplates["iconTemplate6"])
-        break;
-        case 7:
-            applyTemplate(progressCircleTemplates["iconTemplate7"])
-        break;
-        case 8:
-            applyTemplate(progressCircleTemplates["iconTemplate8"])
-        break;
-        case 9:
-            applyTemplate(progressCircleTemplates["iconTemplate9"])
-        break;
-        case 10:
-            applyTemplate(progressCircleTemplates["iconTemplate10"])
-        break;
-        case 11:
-            applyTemplate(progressCircleTemplates["iconTemplate11"])
-        break;
-        case 12:
-            applyTemplate(progressCircleTemplates["iconTemplate12"])
-        break;
+        var context = canvas.getContext('2d');
+        var centerX = canvas.width / 2;
+        var centerY = canvas.height / 2;
+        var radius = 200;
+        var canvasIcons = []
+    
+        switch(countCircleOptionsActive){
+    
+            case 5:
+                applyTemplate(progressCircleTemplates["iconTemplate5"])
+            break;
+            case 6:
+                applyTemplate(progressCircleTemplates["iconTemplate6"])
+            break;
+            case 7:
+                applyTemplate(progressCircleTemplates["iconTemplate7"])
+            break;
+            case 8:
+                applyTemplate(progressCircleTemplates["iconTemplate8"])
+            break;
+            case 9:
+                applyTemplate(progressCircleTemplates["iconTemplate9"])
+            break;
+            case 10:
+                applyTemplate(progressCircleTemplates["iconTemplate10"])
+            break;
+            case 11:
+                applyTemplate(progressCircleTemplates["iconTemplate11"])
+            break;
+            case 12:
+                applyTemplate(progressCircleTemplates["iconTemplate12"])
+            break;
+        }
 
+        canvas.addEventListener('mousedown', function(e) {
+            getCursorPosition(canvas, e)
+        })
     }
 
     function applyTemplate (template) {
@@ -794,9 +880,67 @@ if ( ! current_user_can( 'access_groups' ) ) {
 
     }
 
-    canvas.addEventListener('mousedown', function(e) {
-        getCursorPosition(canvas, e)
-    })
+
+    /* LOGIC FOR INFLUENCE */
+
+    let sliderInfluence = document.getElementById('slider-influence'),
+    influenceNumber = document.getElementById("influence-number"),
+    modalInfluence = document.getElementById("modal-influence"),
+    messageModalInfluence = document.getElementById("message-modal-influence")
+
+    if(sliderInfluence){
+
+        sliderInfluence.value = inputInfluenceValue =! null ? inputInfluenceValue[0] : 0
+        influenceNumber.innerHTML = sliderInfluence.value;
+        setColorToSlider(false)
+    
+        sliderInfluence.addEventListener('input', function () {
+            setColorToSlider(true)
+            influenceNumber.innerHTML = sliderInfluence.value
+        }, false);
+    }
+
+    function setColorToSlider (showModal) {
+        if(sliderInfluence.value > 99){
+            sliderInfluence.style.background = '#027500'
+            sliderInfluence.style.border = 'solid 1px #027500'
+            if(showModal){
+                messageModalInfluence.innerHTML = "COMPLETE INFLUENCE"
+                modalInfluence.style.display = "block";
+            }
+        } else if (sliderInfluence.value < 1) {
+            sliderInfluence.style.background = '#750000'
+            sliderInfluence.style.border = 'solid 1px #750000'
+            if(showModal){
+                messageModalInfluence.innerHTML = "NO INFLUENCE"
+                modalInfluence.style.display = "block";
+            }
+        } else {
+            sliderInfluence.style.background = '#82CFD0'
+            sliderInfluence.style.border = 'solid 1px #82CFD0'
+        }
+    }
+
+    function onChangeSlider(value) {
+        API.create_or_update_influence( 'groups', groupId, {"influence": value }).then(data => {
+            console.log(data)
+        }).catch(err=>{
+            console.log(err)
+        })
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    document.getElementsByClassName("close")[0].onclick = function() {
+        modalInfluence.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modalInfluence) {
+            modalInfluence.style.display = "none";
+        }
+    }
+
 
 </script>
 
