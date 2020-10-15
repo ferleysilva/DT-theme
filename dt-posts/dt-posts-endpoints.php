@@ -422,7 +422,7 @@ class Disciple_Tools_Posts_Endpoints {
         $silent = isset( $get_params["silent"] ) && $get_params["silent"] === "true";
         return DT_Posts::update_post( $url_params["post_type"], $url_params["id"], $fields, $silent );
     }
-
+ 
     public function create_or_update_influence( WP_REST_Request $request ){
         $fields = $request->get_json_params() ?? $request->get_body_params();
         $url_params = $request->get_url_params();

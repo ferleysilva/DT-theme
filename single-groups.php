@@ -25,12 +25,14 @@ if ( ! current_user_can( 'access_groups' ) ) {
     $current_user_id = get_current_user_id();
     $pluginIsActive = false;
 
+    // Valid is plugin is active
     if(in_array('disciple-tools-visual-customization-plugin/disciple-tools-visual-customization-plugin.php', apply_filters('active_plugins', get_option('active_plugins')))){ 
         $pluginIsActive = true;
     } else {
         $pluginIsActive = false;
     }
 
+    // Get the active health metrics of a group
     global $wpdb;
     $results = $wpdb->get_results( "SELECT meta_value FROM wp_postmeta WHERE post_id = {$group["ID"]} AND meta_key = 'health_metrics'", OBJECT );
 
@@ -293,6 +295,8 @@ if ( ! current_user_can( 'access_groups' ) ) {
                                         </div>
                                     </div>
 
+                                    <!-- Show the Slider if the plugin is active -->
+
                                     <?php if ( $pluginIsActive ) : ?>
                                     
                                     <div class="section-subheader">
@@ -303,11 +307,13 @@ if ( ! current_user_can( 'access_groups' ) ) {
                                     </div>
 
                                     <?php endif; ?>
+                                    <!-- End Slider element -->
 
                                 </div>
 
                             </section>
 
+                        <!-- Health Metrics -->
                         <?php if ( !empty( $group_preferences['church_metrics']) && !$pluginIsActive ) : ?>
                             <section id="health-metrics" class="xlarge-6 large-12 medium-6 cell grid-item">
                                 <div class="bordered-box js-progress-bordered-box half-opacity" id="health-tile">
@@ -346,7 +352,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
                             </section>
                         <?php endif; ?>
 
-                        <!-- Health Metrics-->
+                        <!-- Health Metrics with Customization plugin -->
                         <?php if ( !empty( $group_preferences['church_metrics']) && $pluginIsActive ) : ?>
                             <section id="health-metrics_2" class="xlarge-12 large-12 medium-12 cell grid-item">
                                 <div class="bordered-box js-progress-bordered-box" id="health-tile">
@@ -507,6 +513,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
 
     </div> <!-- end #inner-content -->
 
+    <!-- Modal with message for the level of influence -->
     <div id="modal-influence" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -516,6 +523,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
 
 </div> <!-- end #content -->
 
+<!-- Start script visual customization -->
 <script type="application/javascript">
 
     var canvas = document.getElementById('canvas-church-metrics');
@@ -529,6 +537,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
     var selected_group = <?php echo json_encode($group); ?>;
     var countCircleOptionsActive = Object.keys(progressCircleOptionsActive).length
 
+    /* VALID IF CANVAS EXISTS */
     if(canvas){
 
         var context = canvas.getContext('2d');
@@ -537,6 +546,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
         var radius = 200;
         var canvasIcons = []
     
+        /* SELECT THE TAMPLATE FOR THE CIRCLE */
         switch(countCircleOptionsActive){
     
             case 5:
@@ -570,6 +580,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
         })
     }
 
+    /* APPLY THE SELECTED TEMPLATE */
     function applyTemplate (template) {
 
         var index = 0
@@ -604,6 +615,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
         drawProgressCircle()
     }
 
+    /* DRAW THE PROGRESS CIRCLE */
     function drawProgressCircle () {
 
         var churchCommitmentActive = false
@@ -701,6 +713,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
         });
     }
 
+    /* VALID IF THE ICON IS IN THE ARRANGEMENT OF ACTIVE ICONS */
     function findIconInArray (key){
 
         var iconFined = false
@@ -716,6 +729,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
         return iconFined;
     }
 
+    /* GET CURSOR POSITION IN PROGRESS CRICLE */
     function getCursorPosition(canvas, event) {
 
         const rect = canvas.getBoundingClientRect()
@@ -881,13 +895,15 @@ if ( ! current_user_can( 'access_groups' ) ) {
     }
 
 
-    /* LOGIC FOR INFLUENCE */
+
+    /* LOGIC FOR INFLUENCE SLIDER */
 
     let sliderInfluence = document.getElementById('slider-influence'),
     influenceNumber = document.getElementById("influence-number"),
     modalInfluence = document.getElementById("modal-influence"),
     messageModalInfluence = document.getElementById("message-modal-influence")
 
+    /* VALID IF SLIDER EXISTS */
     if(sliderInfluence){
 
         sliderInfluence.value = inputInfluenceValue =! null ? inputInfluenceValue[0] : 0
@@ -900,6 +916,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
         }, false);
     }
 
+    /* SET COLOR TO SLIDER */
     function setColorToSlider (showModal) {
         if(sliderInfluence.value > 99){
             sliderInfluence.style.background = '#027500'
@@ -921,6 +938,7 @@ if ( ! current_user_can( 'access_groups' ) ) {
         }
     }
 
+    /* ON CHANGE SLIDER EVENT */
     function onChangeSlider(value) {
         API.create_or_update_influence( 'groups', groupId, {"influence": value }).then(data => {
             console.log(data)
@@ -929,20 +947,19 @@ if ( ! current_user_can( 'access_groups' ) ) {
         })
     }
 
-    // When the user clicks on <span> (x), close the modal
+    // CLOSE MODAL EVENT
     document.getElementsByClassName("close")[0].onclick = function() {
         modalInfluence.style.display = "none";
     }
 
-    // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
         if (event.target == modalInfluence) {
             modalInfluence.style.display = "none";
         }
     }
 
-
 </script>
+<!-- End script visual customization -->
 
 <!--    Modals-->
     <?php get_template_part( 'dt-assets/parts/modals/modal', 'share' ); ?>

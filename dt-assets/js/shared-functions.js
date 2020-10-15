@@ -89,7 +89,7 @@ window.API = {
 
     update_post: (post_type, postId, postData) => makeRequestOnPosts('POST', `${post_type}/${postId}`, postData),
 
-    create_or_update_influence: (post_type, postId, postData) => makeRequestOnPosts('POST', `${post_type}/influence/${postId}`, postData),
+    create_or_update_influence: (post_type, postId, postData) => makeRequestOnPosts('POST', `${post_type}/influence/${postId}`, postData), 
 
     post_comment: (post_type, postId, comment, comment_type = "comment") => makeRequestOnPosts('POST', `${post_type}/${postId}/comments`, { comment, comment_type }),
 

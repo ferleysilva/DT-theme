@@ -217,9 +217,15 @@ class DT_Posts extends Disciple_Tools_Posts {
         }
     }
 
-
-
-
+    /**
+     * Create or update the value of influence value
+     * 
+     * @param string $post_type
+     * @param int $post_id
+     * @param array $fields
+     * @param bool $check_permissions
+     * 
+     */
     public static function create_or_update_influence( string $post_type, int $post_id, array $fields, bool $check_permissions = true ){
 
         foreach ( $fields as $field_key => $field_value ){

@@ -174,6 +174,7 @@ class Disciple_Tools_Groups_Post_Type
         global $post;
         global $wpdb;
 
+        /* GET THE PROGRESS CIRCLE OPTIONS FROM DATA BASE */
         $progressCircleOptionsActive = json_decode(get_option('vc_progress_circle_options'), TRUE);
 
         if($progressCircleOptionsActive){
@@ -246,6 +247,7 @@ class Disciple_Tools_Groups_Post_Type
             'section'     => 'info',
         ];
 
+        /* VALID IF PLUGIN IS ACTIVE */
         if($pluginIsActive){
             $fields['health_metrics'] = $progressCircleOptionsActive;
         }else {
